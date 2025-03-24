@@ -1,8 +1,8 @@
-# 🐞 A Bug's Life - Stage 1
+# 🐞 A Bug's Life
 
-**CA3 - Stage 1 (2%)**  
-**Semester 2 – 2024-2025**  
-**B.Sc. (Hons) in Computing in Games Development / Software Development, Year 2**
+*A Bug’s Life* is a C++ console application that simulates the movement and interaction of various bugs on a 10x10 Bug Board. When the board is “Tapped” (shaken), each bug moves according to its behavior. If multiple bugs land on the same cell, they fight — and the biggest bug eats the rest. The simulation continues until only one bug remains.
+
+This version features a text-based interface with a functional simulation engine and basic interaction logic.
 
 ---
 
