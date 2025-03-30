@@ -61,6 +61,12 @@ build CMakeFiles/ca3_a_bugs_life.dir/Crawler.cpp.o: CXX_COMPILER__ca3_a_bugs_lif
   OBJECT_DIR = CMakeFiles/ca3_a_bugs_life.dir
   OBJECT_FILE_DIR = CMakeFiles/ca3_a_bugs_life.dir
 
+build CMakeFiles/ca3_a_bugs_life.dir/Board.cpp.o: CXX_COMPILER__ca3_a_bugs_life_unscanned_Debug /Users/lukekirwan/Library/CloudStorage/OneDrive-DundalkInstituteofTechnology/Year2/Semester$ 2/C++/Assesment$ 2025/CA3$ -$ Bugs_Project/ca3-a-bugs-life/Board.cpp || cmake_object_order_depends_target_ca3_a_bugs_life
+  DEP_FILE = CMakeFiles/ca3_a_bugs_life.dir/Board.cpp.o.d
+  FLAGS = -g -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -fcolor-diagnostics
+  OBJECT_DIR = CMakeFiles/ca3_a_bugs_life.dir
+  OBJECT_FILE_DIR = CMakeFiles/ca3_a_bugs_life.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target ca3_a_bugs_life
@@ -69,7 +75,7 @@ build CMakeFiles/ca3_a_bugs_life.dir/Crawler.cpp.o: CXX_COMPILER__ca3_a_bugs_lif
 #############################################
 # Link the executable ca3_a_bugs_life
 
-build ca3_a_bugs_life: CXX_EXECUTABLE_LINKER__ca3_a_bugs_life_Debug CMakeFiles/ca3_a_bugs_life.dir/main.cpp.o CMakeFiles/ca3_a_bugs_life.dir/Crawler.cpp.o
+build ca3_a_bugs_life: CXX_EXECUTABLE_LINKER__ca3_a_bugs_life_Debug CMakeFiles/ca3_a_bugs_life.dir/main.cpp.o CMakeFiles/ca3_a_bugs_life.dir/Crawler.cpp.o CMakeFiles/ca3_a_bugs_life.dir/Board.cpp.o
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk
   OBJECT_DIR = CMakeFiles/ca3_a_bugs_life.dir
   POST_BUILD = :
