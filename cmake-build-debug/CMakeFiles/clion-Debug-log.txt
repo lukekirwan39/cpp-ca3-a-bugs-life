@@ -1,4 +1,4 @@
 /Users/lukekirwan/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/Users/lukekirwan/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/ninja -G Ninja -S "/Users/lukekirwan/Library/CloudStorage/OneDrive-DundalkInstituteofTechnology/Year2/Semester 2/C++/Assesment 2025/CA3 - Bugs_Project/ca3-a-bugs-life" -B "/Users/lukekirwan/Library/CloudStorage/OneDrive-DundalkInstituteofTechnology/Year2/Semester 2/C++/Assesment 2025/CA3 - Bugs_Project/ca3-a-bugs-life/cmake-build-debug"
--- Configuring done (0.1s)
+-- Configuring done (0.0s)
 -- Generating done (0.0s)
 -- Build files have been written to: /Users/lukekirwan/Library/CloudStorage/OneDrive-DundalkInstituteofTechnology/Year2/Semester 2/C++/Assesment 2025/CA3 - Bugs_Project/ca3-a-bugs-life/cmake-build-debug

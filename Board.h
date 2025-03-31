@@ -4,6 +4,10 @@
 
 #include "Crawler.h"
 #include <vector>
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <sstream>
 
 class Board {
 private:
@@ -13,6 +17,7 @@ private:
 
 public:
     Board(int width, int height);
+    Board();
 
     // destructor
     ~Board();
@@ -21,6 +26,8 @@ public:
     void moveAll();
     std::vector<Position> getCrawlerPaths(int id) const;
     void displayBoard() const;
+
+    void loadCrawlersFromFile(const std::string& filename);
 
     // prevent copying
     Board(const Board&) = delete;

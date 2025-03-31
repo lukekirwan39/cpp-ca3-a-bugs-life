@@ -1,20 +1,24 @@
+
 #include <iostream>
+#include "Board.h"
+
 using std::string;
 using std::cout;
 using std::endl;
 using std::cin;
 
 int main(){
+    Board board;
     int choice;
     do{
         cout << "\n===== Bugs Life Menu =====\n";
-        cout << "\n1. Initialize Bug Board (load data from file)\n";
-        cout << "\n2. Display all Bugs\n";
-        cout << "\n3. Find a Bug (given an id)\n";
-        cout << "\n4. Tap the Bug Board (cause all to move, then fight/eat)\n";
-        cout << "\n5. Display Life History of all Bugs (path taken)\n";
-        cout << "\n6. Display all Cells listing their Bugs\n";
-        cout << "\n7. Run simulation (generates a Tap every tenth of a second)\n";
+        cout << "\n1. Initialize Bug Board (load data from file)";
+        cout << "\n2. Display all Bugs";
+        cout << "\n3. Find a Bug (given an id)";
+        cout << "\n4. Tap the Bug Board (cause all to move, then fight/eat)";
+        cout << "\n5. Display Life History of all Bugs (path taken)";
+        cout << "\n6. Display all Cells listing their Bugs";
+        cout << "\n7. Run simulation (generates a Tap every tenth of a second)";
         cout << "\n8. Exit (write Life History of all Bugs to file)\n";
 
         while (!(cin >> choice) || choice < 1 || choice > 8){
@@ -26,10 +30,15 @@ int main(){
         cin.ignore();
 
         switch (choice){
-        case 1:
+        case 1:{
+            std::string filename = "crawler-bugs.txt";
+            board.loadCrawlersFromFile(filename);
+            cout << "Bug board initialized.\n";
             break;
+        }
 
         case 2:
+            board.displayBoard();
             break;
 
         case 3:
