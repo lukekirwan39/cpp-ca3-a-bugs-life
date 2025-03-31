@@ -35,7 +35,7 @@ void Board::loadCrawlersFromFile(const std::string& filename){
         while (std::getline(iss, token, ',')){
             // trims the whitespace
             token.erase(0, token.find_first_not_of(" \t"));
-            token.erase(token.find_first_not_of(" \t")+1);
+            token.erase(token.find_last_not_of(" \t") + 1);
             tokens.push_back(token);
         }
 
@@ -66,6 +66,25 @@ void Board::loadCrawlersFromFile(const std::string& filename){
     }
 
     file.close();
+}
+
+void Board::displayBoard() const {
+    for (const auto& crawler : crawlers) {
+        std::cout << "ID: " << crawler->getId()
+                  << ", Position: (" << crawler->getPosition().x << ", " << crawler->getPosition().y << ")"
+                  << ", Direction: " << crawler->getDirectionAsString()
+                  << ", Size: " << crawler->getSize() << "\n";
+    }
+}
+
+std::string Crawler::getDirectionAsString() const {
+    switch (direction) {
+        case Direction::NORTH: return "NORTH";
+        case Direction::EAST:  return "EAST";
+        case Direction::SOUTH: return "SOUTH";
+        case Direction::WEST:  return "WEST";
+        default: return "UNKNOWN";
+    }
 }
 
 

@@ -19,7 +19,7 @@ int main(){
         cout << "\n5. Display Life History of all Bugs (path taken)";
         cout << "\n6. Display all Cells listing their Bugs";
         cout << "\n7. Run simulation (generates a Tap every tenth of a second)";
-        cout << "\n8. Exit (write Life History of all Bugs to file)";
+        cout << "\n8. Exit (write Life History of all Bugs to file)\n";
 
         while (!(cin >> choice) || choice < 1 || choice > 8){
             cin.clear();
@@ -33,10 +33,12 @@ int main(){
         case 1:{
             std::string filename = "crawler-bugs.txt";
             board.loadCrawlersFromFile(filename);
+            cout << "Bug board initialized.\n";
             break;
         }
 
         case 2:
+            board.displayBoard();
             break;
 
         case 3:
