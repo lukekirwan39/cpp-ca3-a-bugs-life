@@ -1,6 +1,8 @@
 
 #include "Board.h"
 
+#include <map>
+
 Board::Board(int w, int h) : width(w), height(h){}
 
 Board::Board(){};
@@ -94,6 +96,15 @@ Crawler* Board::findBugById(const int id) const{
         }
     }
     return nullptr;
+}
+
+void Board::moveAll() {
+    for (Crawler* crawler: crawlers) {
+        if (crawler->isAlive()) {
+            crawler->move(width, height);
+        }
+    }
+
 }
 
 

@@ -56,6 +56,8 @@ int main(){
         }
 
         case 4:
+            board.moveAll();
+            cout<<" All bugs have moved.\n";
             break;
 
         case 5:
