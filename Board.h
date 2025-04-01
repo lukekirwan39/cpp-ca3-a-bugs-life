@@ -26,8 +26,8 @@ public:
     void moveAll();
     std::vector<Position> getCrawlerPaths(int id) const;
     void displayBoard() const;
-
     void loadCrawlersFromFile(const std::string& filename);
+    Crawler* findBugById(const int id) const;
 
     // prevent copying
     Board(const Board&) = delete;

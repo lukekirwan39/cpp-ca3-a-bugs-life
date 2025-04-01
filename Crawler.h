@@ -50,6 +50,7 @@ public:
     bool isWayBlocked(int boardWidth, int boardHeight) const;
 
     void printStatus() const;
+    void displayCrawler() const;
     std::string getDirectionAsString() const;
 };
 
