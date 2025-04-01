@@ -28,6 +28,8 @@ public:
     void displayBoard() const;
     void loadCrawlersFromFile(const std::string& filename);
     Crawler* findBugById(const int id) const;
+    void displayAllBugPaths() const;
+    void writeLifeHistoryToFile() const;
     // prevent copying
     Board(const Board&) = delete;
     Board& operator=(const Board&) = delete;

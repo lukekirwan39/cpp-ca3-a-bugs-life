@@ -61,6 +61,7 @@ int main(){
             break;
 
         case 5:
+            board.displayAllBugPaths();
             break;
 
         case 6:
@@ -70,6 +71,7 @@ int main(){
             break;
 
         case 8:
+            board.writeLifeHistoryToFile();
             cout << "Exiting program...\n";
             break;
 

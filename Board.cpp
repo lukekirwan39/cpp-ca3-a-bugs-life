@@ -1,7 +1,9 @@
 
 #include "Board.h"
+#include <sstream>
+#include <fstream>
+using namespace std;
 
-#include <map>
 
 Board::Board(int w, int h) : width(w), height(h){}
 
@@ -19,22 +21,22 @@ void Board::addCrawler(int id, Position startPos, Direction dir, int size){
 }
 
 void Board::loadCrawlersFromFile(const std::string& filename){
-    std::ifstream file(filename);
+    ifstream file(filename);
 
     if (!file){
-        std::cout << "Error opening file: " << filename << "\n";
+        cout << "Error opening file: " << filename << "\n";
         return;
     }
 
-    std::string line;
+    string line;
 
     while (getline(file, line)){
         // parsing the line
-        std::istringstream iss(line);
-        std::string token;
-        std::vector<std::string> tokens;
+        istringstream iss(line);
+        string token;
+        vector<std::string> tokens;
 
-        while (std::getline(iss, token, ',')){
+        while (getline(iss, token, ',')){
             // trims the whitespace
             token.erase(0, token.find_first_not_of(" \t"));
             token.erase(token.find_last_not_of(" \t") + 1);
@@ -42,15 +44,15 @@ void Board::loadCrawlersFromFile(const std::string& filename){
         }
 
         if (tokens.size() != 6 || tokens[0] != "C"){
-            std::cout << "Invalid line format: " << line << "\n";
+            cout << "Invalid line format: " << line << "\n";
             continue;
         }
 
-        int id = std::stoi(tokens[1]);
-        int x = std::stoi(tokens[2]);
-        int y = std::stoi(tokens[3]);
-        int dirNum = std::stoi(tokens[4]);
-        int size = std::stoi(tokens[5]);
+        int id = stoi(tokens[1]);
+        int x = stoi(tokens[2]);
+        int y = stoi(tokens[3]);
+        int dirNum = stoi(tokens[4]);
+        int size = stoi(tokens[5]);
 
         Direction dir;
         switch (dirNum){
@@ -59,7 +61,7 @@ void Board::loadCrawlersFromFile(const std::string& filename){
             case 3: dir = Direction::SOUTH; break;
             case 4: dir = Direction::WEST; break;
             default:
-                    std::cout << "Invalid direction number: " << dirNum << "\n";
+                    cout << "Invalid direction number: " << dirNum << "\n";
                     continue;
         }
 
@@ -72,7 +74,7 @@ void Board::loadCrawlersFromFile(const std::string& filename){
 
 void Board::displayBoard() const {
     for (const auto& crawler : crawlers) {
-        std::cout << "ID: " << crawler->getId()
+        cout << "ID: " << crawler->getId()
                   << ", Position: (" << crawler->getPosition().x << ", " << crawler->getPosition().y << ")"
                   << ", Direction: " << crawler->getDirectionAsString()
                   << ", Size: " << crawler->getSize() << "\n";
@@ -104,8 +106,80 @@ void Board::moveAll() {
             crawler->move(width, height);
         }
     }
+}
+void Board::displayAllBugPaths() const {
+    for (const Crawler* crawler: crawlers) {
+        cout <<crawler->getId()<<" Crawaler path: ";
+
+        bool allPaths = true;
+        for (const Position& pos: crawler->getPath()) {
+            if (!allPaths)
+                cout<<",";
+                cout << "(" << pos.x << "," << pos.y << ")";
+                allPaths = false;
+
+        }
+
+
+        if (!crawler->isAlive()) {
+            bool found = false;
+            for (const Crawler* other : crawlers) {
+                if (other->isAlive() && other->getPosition().x == crawler->getPosition().x &&
+                    other->getPosition().y == crawler->getPosition().y) {
+                    cout << "Eaten by "<<other->getId();
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+                cout << "Dead \n";
+        }
+        else {
+            cout<<"Still alive";
+        }
+        cout<<endl;
+    }
+}
+
+void Board::writeLifeHistoryToFile() const {
+    ofstream outfile ("bugs_life_history.out");
+
+    if (!outfile) {
+        cout << "Error opening file: " << "bugs_life_history.out" << "\n";
+    }
+
+    for (const Crawler* crawler: crawlers) {
+        outfile<<crawler->getId()<<"Crawler path : \n";
+        bool first=true;
+        for (const Position& pos: crawler->getPath()) {
+            if (!first)
+                outfile<<",";
+            outfile<<"(" << pos.x << "," << pos.y << ")";
+            first = false;
+        }
+        if (!crawler->isAlive()) {
+            bool found = false;
+            for (const Crawler* other: crawlers) {
+                if (other->isAlive() && other->getPosition().x == crawler->getPosition().x &&
+                    other->getPosition().y == crawler->getPosition().y) {
+                    outfile<<"Eaten by "<<other->getId();
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+                outfile<<"Dead";
+
+        }
+        else {
+            outfile<<"Still alive";
+        }
+        outfile<<endl;
+    }
+    cout<<"life history of all bugs to a text file called bugs_life_history_date_time.out"<<endl;
 
 }
+
 
 
 
