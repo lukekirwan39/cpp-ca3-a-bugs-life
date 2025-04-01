@@ -87,6 +87,15 @@ std::string Crawler::getDirectionAsString() const {
     }
 }
 
+Crawler* Board::findBugById(const int id) const{
+    for (Crawler* bug: crawlers){
+        if (bug->getId() == id){
+            return bug;
+        }
+    }
+    return nullptr;
+}
+
 
 
 

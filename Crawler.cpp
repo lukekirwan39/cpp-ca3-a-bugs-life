@@ -67,5 +67,12 @@ void Crawler::printStatus() const{
     std::cout << std::endl;
 }
 
+void Crawler::displayCrawler() const {
+        std::cout << "ID: " << id
+                  << ", Position: (" << position.x << ", " << position.y << ")"
+                  << ", Direction: " << getDirectionAsString()
+                  << ", Size: " << size << "\n";
+}
+
 
 
