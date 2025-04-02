@@ -1,7 +1,11 @@
 
 #include "Board.h"
+
+#include <algorithm>
 #include <sstream>
 #include <fstream>
+#include <map>
+#include <bits/ranges_algo.h>
 using namespace std;
 
 
@@ -106,6 +110,57 @@ void Board::moveAll() {
             crawler->move(width, height);
         }
     }
+
+    // map<Position, vector<Crawler*>>positionMap;
+    // for (Crawler* crawler: crawlers) {
+    //     if (crawler->isAlive()) {
+    //         positionMap[crawler->getPosition()] = crawlers;
+    //     }
+    // }
+    // for (auto& [position, bugs] : positionMap) {
+    //     if (bugs.size()>1) {
+    //         sort(bugs.begin(), bugs.end(),
+    //         [](Crawler* crawler1, Crawler* crawler2) {
+    //             return crawler1->getSize() > crawler2->getSize();
+    //         });
+    //
+    //         int maxSize = bugs[0]->getSize();
+    //         vector<Crawler*> maxsizebugs;
+    //
+    //         for (Crawler* bug: bugs) {
+    //
+    //             if (bug->getSize() == maxSize) {
+    //                 maxsizebugs.push_back(bug);
+    //             }
+    //             else {
+    //                 break;
+    //             }
+    //         }
+    //         Crawler* winner;
+    //         if (maxsizebugs.size() > 1) {
+    //             srand(time(nullptr));
+    //             winner = maxsizebugs[rand() % maxsizebugs.size()];
+    //         }
+    //         else {
+    //             winner = maxsizebugs[0];
+    //         }
+    //
+    //         // Calculate total size to add to winner
+    //         int totalSize = 0;
+    //         for (Crawler* bug : bugs) {
+    //             if (bug != winner) {
+    //                 totalSize += bug->getSize();
+    //                 bug->setAlive(false);  // Mark as dead
+    //             }
+    //         }
+    //         // Winner grows by sum of eaten bugs' sizes
+    //         winner->setSize(winner->getSize() + totalSize);
+    //
+    //         cout << "At (" << position.x << "," << position.y << "): "
+    //              << "Crawler " << winner->getId() << " ate " << bugs.size()-1
+    //              << " bugs and grew to size " << winner->getSize() << endl;
+    //     }
+    // }
 }
 void Board::displayAllBugPaths() const {
     for (const Crawler* crawler: crawlers) {
@@ -180,7 +235,34 @@ void Board::writeLifeHistoryToFile() const {
 
 }
 
+void Board::displayAllCells() const {
+    map<Position, vector<const Crawler*>> positionMap;
 
+    // Populate the map
+    for (const Crawler* crawler : crawlers) {
+        if (crawler->isAlive()) {
+            positionMap[crawler->getPosition()].push_back(crawler);
+        }
+    }
 
+    // Display all cells
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            Position currentPos{x, y};
+            cout << "(" << x << "," << y << "): ";
 
-
+            auto it = positionMap.find(currentPos);
+            if (it == positionMap.end()) {
+                cout << "empty";
+            } else {
+                bool firstBug = true;
+                for (const Crawler* bug : it->second) {
+                    if (!firstBug) cout << ", ";
+                    cout << "Crawler " << bug->getId();
+                    firstBug = false;
+                }
+            }
+            cout << endl;
+        }
+    }
+}

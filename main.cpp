@@ -8,7 +8,7 @@ using std::endl;
 using std::cin;
 
 int main(){
-    Board board;
+    Board board (7,7);
     int choice;
     do{
         cout << "\n===== Bugs Life Menu =====\n";
@@ -65,6 +65,7 @@ int main(){
             break;
 
         case 6:
+            board.displayAllCells();
             break;
 
         case 7:
