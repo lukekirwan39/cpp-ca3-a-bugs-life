@@ -14,6 +14,7 @@ private:
     int width;
     int height;
     std::vector<Crawler*> crawlers;
+    std::vector<std::vector<std::list<Crawler*>>> grid;
 
 public:
     Board(int width, int height);

@@ -2,7 +2,6 @@
 #include "Board.h"
 #include <sstream>
 #include <fstream>
-using namespace std;
 
 
 Board::Board(int w, int h) : width(w), height(h){}
@@ -21,20 +20,20 @@ void Board::addCrawler(int id, Position startPos, Direction dir, int size){
 }
 
 void Board::loadCrawlersFromFile(const std::string& filename){
-    ifstream file(filename);
+    std::ifstream file(filename);
 
     if (!file){
-        cout << "Error opening file: " << filename << "\n";
+        std::cout << "Error opening file: " << filename << "\n";
         return;
     }
 
-    string line;
+    std::string line;
 
     while (getline(file, line)){
         // parsing the line
-        istringstream iss(line);
-        string token;
-        vector<std::string> tokens;
+        std::istringstream iss(line);
+        std::string token;
+        std::vector<std::string> tokens;
 
         while (getline(iss, token, ',')){
             // trims the whitespace
@@ -44,7 +43,7 @@ void Board::loadCrawlersFromFile(const std::string& filename){
         }
 
         if (tokens.size() != 6 || tokens[0] != "C"){
-            cout << "Invalid line format: " << line << "\n";
+            std::cout << "Invalid line format: " << line << "\n";
             continue;
         }
 
@@ -61,7 +60,7 @@ void Board::loadCrawlersFromFile(const std::string& filename){
             case 3: dir = Direction::SOUTH; break;
             case 4: dir = Direction::WEST; break;
             default:
-                    cout << "Invalid direction number: " << dirNum << "\n";
+                    std::cout << "Invalid direction number: " << dirNum << "\n";
                     continue;
         }
 
@@ -74,7 +73,7 @@ void Board::loadCrawlersFromFile(const std::string& filename){
 
 void Board::displayBoard() const {
     for (const auto& crawler : crawlers) {
-        cout << "ID: " << crawler->getId()
+        std::cout << "ID: " << crawler->getId()
                   << ", Position: (" << crawler->getPosition().x << ", " << crawler->getPosition().y << ")"
                   << ", Direction: " << crawler->getDirectionAsString()
                   << ", Size: " << crawler->getSize() << "\n";
@@ -109,13 +108,13 @@ void Board::moveAll() {
 }
 void Board::displayAllBugPaths() const {
     for (const Crawler* crawler: crawlers) {
-        cout <<crawler->getId()<<" Crawaler path: ";
+        std::cout <<crawler->getId()<<" Crawaler path: ";
 
         bool allPaths = true;
         for (const Position& pos: crawler->getPath()) {
             if (!allPaths)
-                cout<<",";
-                cout << "(" << pos.x << "," << pos.y << ")";
+                std::cout<<",";
+                std::cout << "(" << pos.x << "," << pos.y << ")";
                 allPaths = false;
 
         }
@@ -126,26 +125,26 @@ void Board::displayAllBugPaths() const {
             for (const Crawler* other : crawlers) {
                 if (other->isAlive() && other->getPosition().x == crawler->getPosition().x &&
                     other->getPosition().y == crawler->getPosition().y) {
-                    cout << "Eaten by "<<other->getId();
+                    std::cout << "Eaten by "<<other->getId();
                     found = true;
                     break;
                 }
             }
             if (!found)
-                cout << "Dead \n";
+                std::cout << "Dead \n";
         }
         else {
-            cout<<"Still alive";
+            std::cout<<"Still alive";
         }
-        cout<<endl;
+        std::cout<<std::endl;
     }
 }
 
 void Board::writeLifeHistoryToFile() const {
-    ofstream outfile ("bugs_life_history.out");
+    std::ofstream outfile ("bugs_life_history.out");
 
     if (!outfile) {
-        cout << "Error opening file: " << "bugs_life_history.out" << "\n";
+        std::cout << "Error opening file: " << "bugs_life_history.out" << "\n";
     }
 
     for (const Crawler* crawler: crawlers) {
@@ -174,9 +173,9 @@ void Board::writeLifeHistoryToFile() const {
         else {
             outfile<<"Still alive";
         }
-        outfile<<endl;
+        outfile<<std::endl;
     }
-    cout<<"life history of all bugs to a text file called bugs_life_history_date_time.out"<<endl;
+    std::cout<<"life history of all bugs to a text file called bugs_life_history_date_time.out"<<std::endl;
 
 }
 
