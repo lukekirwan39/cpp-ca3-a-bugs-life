@@ -43,12 +43,16 @@ int Crawler::getId() const{ return id; }
 Position Crawler::getPosition() const{ return position; }
 Direction Crawler::getDirection() const{ return direction; }
 int Crawler::getSize() const{ return size; }
+int Crawler::getKillerId() const{ return killerId;}
 bool Crawler::isAlive() const{ return alive; }
 std::list<Position> Crawler::getPath() const{ return path; }
 
 // setter methods
 void Crawler::setDirection(Direction newDir){ direction = newDir; }
 void Crawler::setAlive(bool status){ alive = status; }
+void Crawler::setKillerId(int id){ killerId = id;}
+
+
 
 
 
@@ -74,5 +78,7 @@ void Crawler::displayCrawler() const {
                   << ", Size: " << size << "\n";
 }
 
-
+void Crawler::grow(int amount){
+    size += amount;
+}
 

@@ -28,6 +28,7 @@ private:
     int size;
     bool alive;
     std::list<Position> path;
+    int killerId = -1;
 
 public:
     // constructor
@@ -39,11 +40,13 @@ public:
     Direction getDirection() const;
     int getSize() const;
     bool isAlive() const;
+    int getKillerId() const;
     std::list<Position> getPath() const;
 
     // setters
     void setDirection(Direction newDir);
     void setAlive(bool status);
+    void setKillerId(int x);
 
     // movement logic
     void move(int boardWidth, int boardHeight);
@@ -51,6 +54,7 @@ public:
 
     void printStatus() const;
     void displayCrawler() const;
+    void grow(int amount);
     std::string getDirectionAsString() const;
 };
 

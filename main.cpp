@@ -1,5 +1,7 @@
 
 #include <iostream>
+#include <thread>
+
 #include "Board.h"
 
 using std::string;
@@ -57,18 +59,22 @@ int main(){
 
         case 4:
             board.moveAll();
+            board.tapBoard();
             cout<<" All bugs have moved.\n";
             break;
 
         case 5:
-            board.displayAllBugPaths();
+            board.displayBugHistories();
             break;
 
         case 6:
+            board.displayCells();
             break;
 
-        case 7:
+        case 7: {
+            board.runSimulation();
             break;
+        }
 
         case 8:
             board.writeLifeHistoryToFile();

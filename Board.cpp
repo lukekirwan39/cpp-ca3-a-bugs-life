@@ -2,11 +2,11 @@
 #include "Board.h"
 #include <sstream>
 #include <fstream>
+#include <thread>
 
+Board::Board(): width(GRID_SIZE), height(GRID_SIZE), grid(GRID_SIZE, std::vector<std::list<Crawler*>>(GRID_SIZE)){}
 
-Board::Board(int w, int h) : width(w), height(h){}
-
-Board::Board(){};
+Board::Board(int w, int h) : width(w), height(h), grid(h, std::vector<std::list<Crawler*>>(w)){}
 
 Board::~Board(){
     for (Crawler* crawler: crawlers){
@@ -17,6 +17,11 @@ Board::~Board(){
 void Board::addCrawler(int id, Position startPos, Direction dir, int size){
     Crawler* newCrawler = new Crawler(id, startPos, dir, size);
     crawlers.push_back(newCrawler);
+
+    int x = startPos.x;
+    int y = startPos.y;
+
+    grid[x][y].push_back(newCrawler);
 }
 
 void Board::loadCrawlersFromFile(const std::string& filename){
@@ -76,7 +81,8 @@ void Board::displayBoard() const {
         std::cout << "ID: " << crawler->getId()
                   << ", Position: (" << crawler->getPosition().x << ", " << crawler->getPosition().y << ")"
                   << ", Direction: " << crawler->getDirectionAsString()
-                  << ", Size: " << crawler->getSize() << "\n";
+                  << ", Size: " << crawler->getSize() <<
+                      ", Status: " << (crawler->isAlive() ? "Alive" : "Dead") << "\n";
     }
 }
 
@@ -100,43 +106,40 @@ Crawler* Board::findBugById(const int id) const{
 }
 
 void Board::moveAll() {
-    for (Crawler* crawler: crawlers) {
+    for (Crawler* crawler : crawlers) {
         if (crawler->isAlive()) {
+            int oldX = crawler->getPosition().x;
+            int oldY = crawler->getPosition().y;
+
+            grid[oldY][oldX].remove_if([crawler](Crawler* c) {
+                return c == crawler;
+            });
+
             crawler->move(width, height);
+
+            int newX = crawler->getPosition().x;
+            int newY = crawler->getPosition().y;
+
+            grid[newY][newX].push_back(crawler);
         }
     }
 }
-void Board::displayAllBugPaths() const {
-    for (const Crawler* crawler: crawlers) {
-        std::cout <<crawler->getId()<<" Crawaler path: ";
 
-        bool allPaths = true;
-        for (const Position& pos: crawler->getPath()) {
-            if (!allPaths)
-                std::cout<<",";
-                std::cout << "(" << pos.x << "," << pos.y << ")";
-                allPaths = false;
+void Board::displayBugHistories() const {
+    for (const Crawler* crawler : crawlers) {
+        std::cout << crawler->getId() << " " << "Crawler" << " Path: ";
 
+        for (const Position& pos : crawler->getPath()) {
+            std::cout << "(" << pos.x << "," << pos.y << ")";
+            if (&pos != &crawler->getPath().back())
+                std::cout << ",";
         }
-
 
         if (!crawler->isAlive()) {
-            bool found = false;
-            for (const Crawler* other : crawlers) {
-                if (other->isAlive() && other->getPosition().x == crawler->getPosition().x &&
-                    other->getPosition().y == crawler->getPosition().y) {
-                    std::cout << "Eaten by "<<other->getId();
-                    found = true;
-                    break;
-                }
-            }
-            if (!found)
-                std::cout << "Dead \n";
+            std::cout << " Eaten by " << crawler->getKillerId();
         }
-        else {
-            std::cout<<"Still alive";
-        }
-        std::cout<<std::endl;
+
+        std::cout << std::endl;
     }
 }
 
@@ -179,7 +182,110 @@ void Board::writeLifeHistoryToFile() const {
 
 }
 
+void Board::tapBoard() {
+    for (int row = 0; row < height; ++row) {
+        for (int col = 0; col < width; ++col) {
+            fightInCell(grid[row][col]);
+        }
+    }
+}
+
+void Board::displayCells() const {
+    for (int row = 0; row < height; ++row) {
+        for (int col = 0; col < width; ++col) {
+            std::cout << "(" << row << "," << col << "): ";
+
+            const std::list<Crawler*>& cell = grid[row][col];
+            bool hasAlive = false;
+            bool first = true;
+
+            for (const Crawler* bug : cell) {
+                if (!bug->isAlive()) continue;
+
+                hasAlive = true;
+                if (!first) std::cout << ", ";
+                std::cout << "Crawler " << bug->getId();
+                first = false;
+            }
+
+            if (!hasAlive) {
+                std::cout << "empty";
+            }
+
+            std::cout << std::endl;
+        }
+    }
+}
 
 
+void Board::fightInCell(std::list<Crawler *> &cell){
+    //filters out all the dead bugs
+    cell.remove_if([](Crawler* c){
+        return !c->isAlive();
+    });
 
+    if (cell.size() <= 1) return;
 
+    //finding the max size
+    int maxSize = 0;
+    for (Crawler* c: cell){
+        if (c->getSize() > maxSize)
+            maxSize = c->getSize();
+    }
+
+    std::vector<Crawler*> contenders;
+    for (Crawler* c: cell){
+        if (c->getSize() == maxSize)
+            contenders.push_back(c);
+    }
+
+    Crawler* dominant = contenders.size() == 1 ? contenders[0] : contenders[rand() % contenders.size()];
+
+    int eatenSize = 0;
+    for (Crawler* c: cell){
+        if (c != dominant){
+            eatenSize += c->getSize();
+            c->setAlive(false);
+            c->setKillerId(dominant->getId());
+        }
+    }
+
+    dominant->grow(eatenSize);
+}
+
+int Board::countAliveBugs() const{
+    int alive = 0;
+    for (const Crawler* c : crawlers) {
+        if (c->isAlive()) ++alive;
+    }
+    return alive;
+}
+
+void Board::runSimulation() {
+    int round = 1;
+
+    while (countAliveBugs() > 1) {
+        std::cout << "\n--- Round " << round << " ---\n";
+
+        moveAll();
+        tapBoard();
+        displayCells();
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        ++round;
+    }
+
+    std::cout << "\nSimulation complete! ";
+    if (countAliveBugs() == 1) {
+        for (Crawler* c : crawlers) {
+            if (c->isAlive()) {
+                std::cout << "Last bug standing: Crawler " << c->getId() << "\n";
+            }
+        }
+    } else {
+        std::cout << "No bugs survived. \n";
+    }
+
+    writeLifeHistoryToFile();
+    std::cout << "Life history saved to file.\n";
+}

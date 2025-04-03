@@ -14,9 +14,11 @@ private:
     int width;
     int height;
     std::vector<Crawler*> crawlers;
+    static const int GRID_SIZE = 10;
     std::vector<std::vector<std::list<Crawler*>>> grid;
 
 public:
+    // constructors
     Board(int width, int height);
     Board();
 
@@ -28,9 +30,15 @@ public:
     std::vector<Position> getCrawlerPaths(int id) const;
     void displayBoard() const;
     void loadCrawlersFromFile(const std::string& filename);
-    Crawler* findBugById(const int id) const;
-    void displayAllBugPaths() const;
+    Crawler* findBugById(int id) const;
+    void displayBugHistories() const;
+    void displayCells() const;
     void writeLifeHistoryToFile() const;
+    static void fightInCell(std::list<Crawler*>& cell);
+    void tapBoard();
+    int countAliveBugs() const;
+    void runSimulation();
+
     // prevent copying
     Board(const Board&) = delete;
     Board& operator=(const Board&) = delete;
