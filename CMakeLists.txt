@@ -1,10 +1,28 @@
-cmake_minimum_required(VERSION 3.30)
-project(ca3_a_bugs_life)
+cmake_minimum_required(VERSION 3.21)
+project(ca3-a-bugs-life)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 
-add_executable(ca3_a_bugs_life main.cpp
+# Set the SFML 2.6.2 path explicitly
+set(SFML_DIR "/opt/homebrew/opt/sfml@2/lib/cmake/SFML")
+
+find_package(SFML 2 REQUIRED COMPONENTS graphics window audio system)
+
+# Add ALL .cpp files used in the project
+add_executable(ca3-a-bugs-life
+        main.cpp
         Crawler.cpp
-        Crawler.h
-        Board.h
-        Board.cpp)
+        Board.cpp
+        Hopper.cpp
+        Hopper.h
+        Bug.cpp
+)
+
+# Link SFML libraries
+target_link_libraries(ca3-a-bugs-life
+        PRIVATE
+        sfml-graphics
+        sfml-window
+        sfml-audio
+        sfml-system
+)

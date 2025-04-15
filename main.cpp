@@ -33,8 +33,8 @@ int main(){
 
         switch (choice){
         case 1:{
-            std::string filename = "crawler-bugs.txt";
-            board.loadCrawlersFromFile(filename);
+            std::string filename = "bugs.txt";
+            board.loadBugsFromFile(filename);
             cout << "Bug board initialized.\n";
             break;
         }
@@ -47,10 +47,10 @@ int main(){
             int searchId;
             cout << "Enter the bug id to search: ";
             cin >> searchId;
-            Crawler* result = board.findBugById(searchId);
+            Bug* result = board.findBugById(searchId);
             if (result != nullptr){
                 cout << "Bug found: " << endl;
-                result->displayCrawler();
+                result->display();
             } else{
                 cout << "Bug " << searchId << " not found." << endl;
             }

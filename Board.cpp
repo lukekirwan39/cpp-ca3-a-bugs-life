@@ -2,102 +2,118 @@
 #include "Board.h"
 #include <sstream>
 #include <fstream>
+#include <iostream>
 #include <thread>
 
-Board::Board(): width(GRID_SIZE), height(GRID_SIZE), grid(GRID_SIZE, std::vector<std::list<Crawler*>>(GRID_SIZE)){}
 
-Board::Board(int w, int h) : width(w), height(h), grid(h, std::vector<std::list<Crawler*>>(w)){}
+Board::Board(): width(GRID_SIZE), height(GRID_SIZE), grid(GRID_SIZE, std::vector<std::list<Bug*>>(GRID_SIZE)){}
+
+Board::Board(int w, int h) : width(w), height(h), grid(h, std::vector<std::list<Bug*>>(w)){}
 
 Board::~Board(){
-    for (Crawler* crawler: crawlers){
-        delete crawler;
+    for (Bug* bug: bugs){
+        delete bug;
     }
 }
 
-void Board::addCrawler(int id, Position startPos, Direction dir, int size){
-    Crawler* newCrawler = new Crawler(id, startPos, dir, size);
-    crawlers.push_back(newCrawler);
+void Board::addBug(Bug* bug) {
+    bugs.push_back(bug);
 
-    int x = startPos.x;
-    int y = startPos.y;
+    int x = bug->getPosition().x;
+    int y = bug->getPosition().y;
 
-    grid[x][y].push_back(newCrawler);
+    grid[y][x].push_back(bug);
 }
 
-void Board::loadCrawlersFromFile(const std::string& filename){
+void Board::loadBugsFromFile(const std::string& filename = "bugs.txt") {
     std::ifstream file(filename);
 
-    if (!file){
-        std::cout << "Error opening file: " << filename << "\n";
+    if (!file) {
+        std::cerr << "Error opening file: " << filename << "\n";
         return;
     }
 
     std::string line;
-
-    while (getline(file, line)){
-        // parsing the line
+    while (getline(file, line)) {
         std::istringstream iss(line);
         std::string token;
         std::vector<std::string> tokens;
 
-        while (getline(iss, token, ',')){
-            // trims the whitespace
+        while (getline(iss, token, ',')) {
             token.erase(0, token.find_first_not_of(" \t"));
             token.erase(token.find_last_not_of(" \t") + 1);
             tokens.push_back(token);
         }
 
-        if (tokens.size() != 6 || tokens[0] != "C"){
-            std::cout << "Invalid line format: " << line << "\n";
-            continue;
-        }
+        if (tokens.size() != 6) continue;
 
-        int id = stoi(tokens[1]);
-        int x = stoi(tokens[2]);
-        int y = stoi(tokens[3]);
-        int dirNum = stoi(tokens[4]);
-        int size = stoi(tokens[5]);
+        char type = tokens[0][0];
+        int id = std::stoi(tokens[1]);
+        int x = std::stoi(tokens[2]);
+        int y = std::stoi(tokens[3]);
+        int dirNum = std::stoi(tokens[4]);
+        int size = std::stoi(tokens[5]);
 
         Direction dir;
-        switch (dirNum){
-            case 1: dir = Direction::NORTH; break;
-            case 2: dir = Direction::EAST; break;
-            case 3: dir = Direction::SOUTH; break;
-            case 4: dir = Direction::WEST; break;
-            default:
-                    std::cout << "Invalid direction number: " << dirNum << "\n";
-                    continue;
+        switch (dirNum) {
+        case 1: dir = Direction::NORTH; break;
+        case 2: dir = Direction::EAST; break;
+        case 3: dir = Direction::SOUTH; break;
+        case 4: dir = Direction::WEST; break;
+        default: continue;
         }
 
         Position pos = {x, y};
-        addCrawler(id, pos, dir, size);
+
+        if (type == 'C') {
+            addBug(new Crawler(id, pos, dir, size));
+        } else if (type == 'H') {
+            addBug(new Hopper(id, pos, dir, size));
+        }
     }
 
     file.close();
 }
 
+std::string directionToString(Direction dir) {
+    switch (dir) {
+    case Direction::NORTH: return "North";
+    case Direction::EAST:  return "East";
+    case Direction::SOUTH: return "South";
+    case Direction::WEST:  return "West";
+    default: return "Unknown";
+    }
+}
+
 void Board::displayBoard() const {
-    for (const auto& crawler : crawlers) {
-        std::cout << "ID: " << crawler->getId()
-                  << ", Position: (" << crawler->getPosition().x << ", " << crawler->getPosition().y << ")"
-                  << ", Direction: " << crawler->getDirectionAsString()
-                  << ", Size: " << crawler->getSize() <<
-                      ", Status: " << (crawler->isAlive() ? "Alive" : "Dead") << "\n";
+    for (const auto& bug : bugs) {
+        std::string typeName;
+        std::string extra;
+
+        if (auto hopper = dynamic_cast<const Hopper*>(bug)) {
+            typeName = "Hopper";
+            extra = " " + std::to_string(hopper->getHopLength());
+        } else if (dynamic_cast<const Crawler*>(bug)) {
+            typeName = "Crawler";
+        } else {
+            typeName = "Unknown";
+        }
+
+        Position pos = bug->getPosition();
+
+        std::cout << bug->getId() << " "
+                  << typeName << " "
+                  << "(" << pos.x << "," << pos.y << ") "
+                  << bug->getSize() << " "
+                  << directionToString(bug->getDirection())
+                  << extra << " "
+                  << (bug->isAlive() ? "Alive" : "Dead")
+                  << "\n";
     }
 }
 
-std::string Crawler::getDirectionAsString() const {
-    switch (direction) {
-        case Direction::NORTH: return "NORTH";
-        case Direction::EAST:  return "EAST";
-        case Direction::SOUTH: return "SOUTH";
-        case Direction::WEST:  return "WEST";
-        default: return "UNKNOWN";
-    }
-}
-
-Crawler* Board::findBugById(const int id) const{
-    for (Crawler* bug: crawlers){
+Bug* Board::findBugById(const int id) const{
+    for (Bug* bug: bugs){
         if (bug->getId() == id){
             return bug;
         }
@@ -106,37 +122,44 @@ Crawler* Board::findBugById(const int id) const{
 }
 
 void Board::moveAll() {
-    for (Crawler* crawler : crawlers) {
-        if (crawler->isAlive()) {
-            int oldX = crawler->getPosition().x;
-            int oldY = crawler->getPosition().y;
-
-            grid[oldY][oldX].remove_if([crawler](Crawler* c) {
-                return c == crawler;
+    for (Bug* bug : bugs) {
+        if (bug->isAlive()) {
+            Position oldPos = bug->getPosition();
+            grid[oldPos.y][oldPos.x].remove_if([bug](Bug* b) {
+                return b == bug;
             });
 
-            crawler->move(width, height);
+            bug->move();
 
-            int newX = crawler->getPosition().x;
-            int newY = crawler->getPosition().y;
-
-            grid[newY][newX].push_back(crawler);
+            Position newPos = bug->getPosition();
+            grid[newPos.y][newPos.x].push_back(bug);
         }
     }
 }
 
 void Board::displayBugHistories() const {
-    for (const Crawler* crawler : crawlers) {
-        std::cout << crawler->getId() << " " << "Crawler" << " Path: ";
-
-        for (const Position& pos : crawler->getPath()) {
-            std::cout << "(" << pos.x << "," << pos.y << ")";
-            if (&pos != &crawler->getPath().back())
-                std::cout << ",";
+    for (const Bug* bug : bugs) {
+        std::string type = "Unknown";
+        if (dynamic_cast<const Hopper*>(bug)) {
+            type = "Hopper";
+        } else if (dynamic_cast<const Crawler*>(bug)) {
+            type = "Crawler";
         }
 
-        if (!crawler->isAlive()) {
-            std::cout << " Eaten by " << crawler->getKillerId();
+        std::cout << bug->getId() << " " << type << " Path: ";
+
+        const std::vector<Position>& path = bug->getPath();
+        for (size_t i = 0; i < path.size(); ++i) {
+            std::cout << "(" << path[i].x << "," << path[i].y << ")";
+            if (i < path.size() - 1) {
+                std::cout << ", ";
+            }
+        }
+
+        if (!bug->isAlive()) {
+            if (const Crawler* crawler = dynamic_cast<const Crawler*>(bug)) {
+                std::cout << " Eaten by " << crawler->getKillerId();
+            }
         }
 
         std::cout << std::endl;
@@ -144,42 +167,44 @@ void Board::displayBugHistories() const {
 }
 
 void Board::writeLifeHistoryToFile() const {
-    std::ofstream outfile ("bugs_life_history.out");
+    std::ofstream outfile("bugs_life_history.out");
 
     if (!outfile) {
-        std::cout << "Error opening file: " << "bugs_life_history.out" << "\n";
+        std::cerr << "Error opening file: bugs_life_history.out\n";
+        return;
     }
 
-    for (const Crawler* crawler: crawlers) {
-        outfile<<crawler->getId()<<"Crawler path : \n";
-        bool first=true;
-        for (const Position& pos: crawler->getPath()) {
-            if (!first)
-                outfile<<",";
-            outfile<<"(" << pos.x << "," << pos.y << ")";
-            first = false;
-        }
-        if (!crawler->isAlive()) {
-            bool found = false;
-            for (const Crawler* other: crawlers) {
-                if (other->isAlive() && other->getPosition().x == crawler->getPosition().x &&
-                    other->getPosition().y == crawler->getPosition().y) {
-                    outfile<<"Eaten by "<<other->getId();
-                    found = true;
-                    break;
-                }
+    for (const Bug* bug : bugs) {
+        std::string type = dynamic_cast<const Hopper*>(bug) ? "Hopper" :
+                           dynamic_cast<const Crawler*>(bug) ? "Crawler" : "Unknown";
+
+        outfile << bug->getId() << " " << type << " path: ";
+
+        const auto& path = bug->getPath();
+        for (size_t i = 0; i < path.size(); ++i) {
+            outfile << "(" << path[i].x << "," << path[i].y << ")";
+            if (i < path.size() - 1) {
+                outfile << ",";
             }
-            if (!found)
-                outfile<<"Dead";
+        }
 
+        outfile << " - ";
+        if (!bug->isAlive()) {
+            if (const Crawler* c = dynamic_cast<const Crawler*>(bug)) {
+                outfile << "Eaten by " << c->getKillerId();
+            } else {
+                outfile << "Dead";
+            }
+        } else {
+            outfile << "Still alive";
         }
-        else {
-            outfile<<"Still alive";
-        }
-        outfile<<std::endl;
+
+        outfile << "\n";
     }
-    std::cout<<"life history of all bugs to a text file called bugs_life_history_date_time.out"<<std::endl;
 
+    outfile.close();
+
+    std::cout << "Life history of all bugs written to: bugs_life_history.out\n";
 }
 
 void Board::tapBoard() {
@@ -195,16 +220,25 @@ void Board::displayCells() const {
         for (int col = 0; col < width; ++col) {
             std::cout << "(" << row << "," << col << "): ";
 
-            const std::list<Crawler*>& cell = grid[row][col];
+            const std::list<Bug*>& cell = grid[row][col];
             bool hasAlive = false;
             bool first = true;
 
-            for (const Crawler* bug : cell) {
+            for (const Bug* bug : cell) {
                 if (!bug->isAlive()) continue;
 
                 hasAlive = true;
                 if (!first) std::cout << ", ";
-                std::cout << "Crawler " << bug->getId();
+
+                // Identify bug type
+                if (dynamic_cast<const Crawler*>(bug)) {
+                    std::cout << "Crawler " << bug->getId();
+                } else if (dynamic_cast<const Hopper*>(bug)) {
+                    std::cout << "Hopper " << bug->getId();
+                } else {
+                    std::cout << "UnknownBug " << bug->getId();
+                }
+
                 first = false;
             }
 
@@ -218,32 +252,42 @@ void Board::displayCells() const {
 }
 
 
-void Board::fightInCell(std::list<Crawler *> &cell){
-    //filters out all the dead bugs
-    cell.remove_if([](Crawler* c){
-        return !c->isAlive();
+void Board::fightInCell(std::list<Bug*>& cell) {
+    cell.remove_if([](Bug* bug) {
+        Crawler* crawler = dynamic_cast<Crawler*>(bug);
+        return (crawler && !crawler->isAlive());
     });
 
-    if (cell.size() <= 1) return;
+    std::vector<Crawler*> crawlers;
+    for (Bug* bug : cell) {
+        if (Crawler* crawler = dynamic_cast<Crawler*>(bug)) {
+            if (crawler->isAlive()) {
+                crawlers.push_back(crawler);
+            }
+        }
+    }
 
-    //finding the max size
+    if (crawlers.size() <= 1) return;
+
     int maxSize = 0;
-    for (Crawler* c: cell){
+    for (Crawler* c : crawlers) {
         if (c->getSize() > maxSize)
             maxSize = c->getSize();
     }
 
     std::vector<Crawler*> contenders;
-    for (Crawler* c: cell){
+    for (Crawler* c : crawlers) {
         if (c->getSize() == maxSize)
             contenders.push_back(c);
     }
 
-    Crawler* dominant = contenders.size() == 1 ? contenders[0] : contenders[rand() % contenders.size()];
+    Crawler* dominant = (contenders.size() == 1)
+        ? contenders[0]
+        : contenders[rand() % contenders.size()];
 
     int eatenSize = 0;
-    for (Crawler* c: cell){
-        if (c != dominant){
+    for (Crawler* c : crawlers) {
+        if (c != dominant) {
             eatenSize += c->getSize();
             c->setAlive(false);
             c->setKillerId(dominant->getId());
@@ -255,8 +299,8 @@ void Board::fightInCell(std::list<Crawler *> &cell){
 
 int Board::countAliveBugs() const{
     int alive = 0;
-    for (const Crawler* c : crawlers) {
-        if (c->isAlive()) ++alive;
+    for (const Bug* bug : bugs) {
+        if (bug->isAlive()) ++alive;
     }
     return alive;
 }
@@ -277,9 +321,9 @@ void Board::runSimulation() {
 
     std::cout << "\nSimulation complete! ";
     if (countAliveBugs() == 1) {
-        for (Crawler* c : crawlers) {
-            if (c->isAlive()) {
-                std::cout << "Last bug standing: Crawler " << c->getId() << "\n";
+        for (Bug* bug : bugs) {
+            if (bug->isAlive()) {
+                std::cout << "Last bug standing: Crawler " << bug->getId() << "\n";
             }
         }
     } else {
