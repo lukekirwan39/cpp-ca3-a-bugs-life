@@ -4,7 +4,8 @@ project(ca3-a-bugs-life)
 set(CMAKE_CXX_STANDARD 17)
 
 # Set the SFML 2.6.2 path explicitly
-set(SFML_DIR "/opt/homebrew/opt/sfml@2/lib/cmake/SFML")
+set(SFML_DIR "C:/SFML-2.6.2/lib/cmake/SFML")
+
 
 find_package(SFML 2 REQUIRED COMPONENTS graphics window audio system)
 

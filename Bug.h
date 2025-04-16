@@ -1,5 +1,6 @@
 #ifndef BUG_H
 #define BUG_H
+#include <string>
 
 #include <vector>
 
