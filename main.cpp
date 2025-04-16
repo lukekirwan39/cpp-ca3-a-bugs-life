@@ -1,5 +1,7 @@
 
 #include <iostream>
+#include <thread>
+
 #include "Board.h"
 
 using std::string;
@@ -8,7 +10,7 @@ using std::endl;
 using std::cin;
 
 int main(){
-    Board board (7,7);
+    Board board;
     int choice;
     do{
         cout << "\n===== Bugs Life Menu =====\n";
@@ -31,8 +33,8 @@ int main(){
 
         switch (choice){
         case 1:{
-            std::string filename = "crawler-bugs.txt";
-            board.loadCrawlersFromFile(filename);
+            std::string filename = "bugs.txt";
+            board.loadBugsFromFile(filename);
             cout << "Bug board initialized.\n";
             break;
         }
@@ -45,10 +47,10 @@ int main(){
             int searchId;
             cout << "Enter the bug id to search: ";
             cin >> searchId;
-            Crawler* result = board.findBugById(searchId);
+            Bug* result = board.findBugById(searchId);
             if (result != nullptr){
                 cout << "Bug found: " << endl;
-                result->displayCrawler();
+                result->display();
             } else{
                 cout << "Bug " << searchId << " not found." << endl;
             }
@@ -57,19 +59,22 @@ int main(){
 
         case 4:
             board.moveAll();
+            board.tapBoard();
             cout<<" All bugs have moved.\n";
             break;
 
         case 5:
-            board.displayAllBugPaths();
+            board.displayBugHistories();
             break;
 
         case 6:
-            board.displayAllCells();
+            board.displayCells();
             break;
 
-        case 7:
+        case 7: {
+            board.runSimulation();
             break;
+        }
 
         case 8:
             board.writeLifeHistoryToFile();
