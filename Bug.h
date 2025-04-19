@@ -3,6 +3,7 @@
 #include <string>
 
 #include <vector>
+#include <SFML/Graphics.hpp>
 
 enum class Direction { NORTH = 1, EAST, SOUTH, WEST };
 
