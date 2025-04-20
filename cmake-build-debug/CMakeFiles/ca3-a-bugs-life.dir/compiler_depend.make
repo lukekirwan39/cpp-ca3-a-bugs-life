@@ -1034,8 +1034,6 @@ CMakeFiles/ca3-a-bugs-life.dir/Hopper.cpp.obj: C:/Users/araya/OneDrive\ -\ Dunda
   C:/Users/araya/OneDrive\ -\ Dundalk\ Institute\ of\ Technology/C++/cpp-ca3-a-bugs-life/Bug.h \
   C:/Users/araya/OneDrive\ -\ Dundalk\ Institute\ of\ Technology/C++/cpp-ca3-a-bugs-life/Hopper.h
 
-CMakeFiles/ca3-a-bugs-life.dir/SuperBug.cpp.obj: C:/Users/araya/OneDrive\ -\ Dundalk\ Institute\ of\ Technology/C++/cpp-ca3-a-bugs-life/SuperBug.cpp
-
 CMakeFiles/ca3-a-bugs-life.dir/main.cpp.obj: C:/Users/araya/OneDrive\ -\ Dundalk\ Institute\ of\ Technology/C++/cpp-ca3-a-bugs-life/main.cpp \
   C:/Program\ Files/JetBrains/CLion\ 2024.3.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/algorithm \
   C:/Program\ Files/JetBrains/CLion\ 2024.3.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/backward/binders.h \
@@ -1516,8 +1514,6 @@ C:/SFML-2.6.2/include/SFML/Graphics/Glyph.hpp:
 C:/Program\ Files/JetBrains/CLion\ 2024.3.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_multimap.h:
 
 C:/Program\ Files/JetBrains/CLion\ 2024.3.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_pair.h:
-
-C:/Users/araya/OneDrive\ -\ Dundalk\ Institute\ of\ Technology/C++/cpp-ca3-a-bugs-life/SuperBug.cpp:
 
 C:/Program\ Files/JetBrains/CLion\ 2024.3.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_tempbuf.h:
 

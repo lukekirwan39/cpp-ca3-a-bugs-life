@@ -224,29 +224,29 @@ Hopper.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\ca3-a-bugs-life.dir\build.make CMakeFiles/ca3-a-bugs-life.dir/Hopper.cpp.s
 .PHONY : Hopper.cpp.s
 
-SuperBug.obj: SuperBug.cpp.obj
-.PHONY : SuperBug.obj
+Jumper.obj: Jumper.cpp.obj
+.PHONY : Jumper.obj
 
 # target to build an object file
-SuperBug.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\ca3-a-bugs-life.dir\build.make CMakeFiles/ca3-a-bugs-life.dir/SuperBug.cpp.obj
-.PHONY : SuperBug.cpp.obj
+Jumper.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\ca3-a-bugs-life.dir\build.make CMakeFiles/ca3-a-bugs-life.dir/Jumper.cpp.obj
+.PHONY : Jumper.cpp.obj
 
-SuperBug.i: SuperBug.cpp.i
-.PHONY : SuperBug.i
+Jumper.i: Jumper.cpp.i
+.PHONY : Jumper.i
 
 # target to preprocess a source file
-SuperBug.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\ca3-a-bugs-life.dir\build.make CMakeFiles/ca3-a-bugs-life.dir/SuperBug.cpp.i
-.PHONY : SuperBug.cpp.i
+Jumper.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\ca3-a-bugs-life.dir\build.make CMakeFiles/ca3-a-bugs-life.dir/Jumper.cpp.i
+.PHONY : Jumper.cpp.i
 
-SuperBug.s: SuperBug.cpp.s
-.PHONY : SuperBug.s
+Jumper.s: Jumper.cpp.s
+.PHONY : Jumper.s
 
 # target to generate assembly for a file
-SuperBug.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\ca3-a-bugs-life.dir\build.make CMakeFiles/ca3-a-bugs-life.dir/SuperBug.cpp.s
-.PHONY : SuperBug.cpp.s
+Jumper.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\ca3-a-bugs-life.dir\build.make CMakeFiles/ca3-a-bugs-life.dir/Jumper.cpp.s
+.PHONY : Jumper.cpp.s
 
 main.obj: main.cpp.obj
 .PHONY : main.obj
@@ -293,9 +293,9 @@ help:
 	@echo ... Hopper.obj
 	@echo ... Hopper.i
 	@echo ... Hopper.s
-	@echo ... SuperBug.obj
-	@echo ... SuperBug.i
-	@echo ... SuperBug.s
+	@echo ... Jumper.obj
+	@echo ... Jumper.i
+	@echo ... Jumper.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s

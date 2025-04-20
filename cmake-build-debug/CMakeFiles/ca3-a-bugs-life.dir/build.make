@@ -143,20 +143,20 @@ CMakeFiles/ca3-a-bugs-life.dir/Bug.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/ca3-a-bugs-life.dir/Bug.cpp.s"
 	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\araya\OneDrive - Dundalk Institute of Technology\C++\cpp-ca3-a-bugs-life\Bug.cpp" -o CMakeFiles\ca3-a-bugs-life.dir\Bug.cpp.s
 
-CMakeFiles/ca3-a-bugs-life.dir/SuperBug.cpp.obj: CMakeFiles/ca3-a-bugs-life.dir/flags.make
-CMakeFiles/ca3-a-bugs-life.dir/SuperBug.cpp.obj: CMakeFiles/ca3-a-bugs-life.dir/includes_CXX.rsp
-CMakeFiles/ca3-a-bugs-life.dir/SuperBug.cpp.obj: C:/Users/araya/OneDrive\ -\ Dundalk\ Institute\ of\ Technology/C++/cpp-ca3-a-bugs-life/SuperBug.cpp
-CMakeFiles/ca3-a-bugs-life.dir/SuperBug.cpp.obj: CMakeFiles/ca3-a-bugs-life.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="C:\Users\araya\OneDrive - Dundalk Institute of Technology\C++\cpp-ca3-a-bugs-life\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/ca3-a-bugs-life.dir/SuperBug.cpp.obj"
-	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ca3-a-bugs-life.dir/SuperBug.cpp.obj -MF CMakeFiles\ca3-a-bugs-life.dir\SuperBug.cpp.obj.d -o CMakeFiles\ca3-a-bugs-life.dir\SuperBug.cpp.obj -c "C:\Users\araya\OneDrive - Dundalk Institute of Technology\C++\cpp-ca3-a-bugs-life\SuperBug.cpp"
+CMakeFiles/ca3-a-bugs-life.dir/Jumper.cpp.obj: CMakeFiles/ca3-a-bugs-life.dir/flags.make
+CMakeFiles/ca3-a-bugs-life.dir/Jumper.cpp.obj: CMakeFiles/ca3-a-bugs-life.dir/includes_CXX.rsp
+CMakeFiles/ca3-a-bugs-life.dir/Jumper.cpp.obj: C:/Users/araya/OneDrive\ -\ Dundalk\ Institute\ of\ Technology/C++/cpp-ca3-a-bugs-life/Jumper.cpp
+CMakeFiles/ca3-a-bugs-life.dir/Jumper.cpp.obj: CMakeFiles/ca3-a-bugs-life.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="C:\Users\araya\OneDrive - Dundalk Institute of Technology\C++\cpp-ca3-a-bugs-life\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/ca3-a-bugs-life.dir/Jumper.cpp.obj"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ca3-a-bugs-life.dir/Jumper.cpp.obj -MF CMakeFiles\ca3-a-bugs-life.dir\Jumper.cpp.obj.d -o CMakeFiles\ca3-a-bugs-life.dir\Jumper.cpp.obj -c "C:\Users\araya\OneDrive - Dundalk Institute of Technology\C++\cpp-ca3-a-bugs-life\Jumper.cpp"
 
-CMakeFiles/ca3-a-bugs-life.dir/SuperBug.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/ca3-a-bugs-life.dir/SuperBug.cpp.i"
-	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\araya\OneDrive - Dundalk Institute of Technology\C++\cpp-ca3-a-bugs-life\SuperBug.cpp" > CMakeFiles\ca3-a-bugs-life.dir\SuperBug.cpp.i
+CMakeFiles/ca3-a-bugs-life.dir/Jumper.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/ca3-a-bugs-life.dir/Jumper.cpp.i"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\araya\OneDrive - Dundalk Institute of Technology\C++\cpp-ca3-a-bugs-life\Jumper.cpp" > CMakeFiles\ca3-a-bugs-life.dir\Jumper.cpp.i
 
-CMakeFiles/ca3-a-bugs-life.dir/SuperBug.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/ca3-a-bugs-life.dir/SuperBug.cpp.s"
-	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\araya\OneDrive - Dundalk Institute of Technology\C++\cpp-ca3-a-bugs-life\SuperBug.cpp" -o CMakeFiles\ca3-a-bugs-life.dir\SuperBug.cpp.s
+CMakeFiles/ca3-a-bugs-life.dir/Jumper.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/ca3-a-bugs-life.dir/Jumper.cpp.s"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\araya\OneDrive - Dundalk Institute of Technology\C++\cpp-ca3-a-bugs-life\Jumper.cpp" -o CMakeFiles\ca3-a-bugs-life.dir\Jumper.cpp.s
 
 # Object files for target ca3-a-bugs-life
 ca3__a__bugs__life_OBJECTS = \
@@ -165,7 +165,7 @@ ca3__a__bugs__life_OBJECTS = \
 "CMakeFiles/ca3-a-bugs-life.dir/Board.cpp.obj" \
 "CMakeFiles/ca3-a-bugs-life.dir/Hopper.cpp.obj" \
 "CMakeFiles/ca3-a-bugs-life.dir/Bug.cpp.obj" \
-"CMakeFiles/ca3-a-bugs-life.dir/SuperBug.cpp.obj"
+"CMakeFiles/ca3-a-bugs-life.dir/Jumper.cpp.obj"
 
 # External object files for target ca3-a-bugs-life
 ca3__a__bugs__life_EXTERNAL_OBJECTS =
@@ -175,7 +175,7 @@ ca3-a-bugs-life.exe: CMakeFiles/ca3-a-bugs-life.dir/Crawler.cpp.obj
 ca3-a-bugs-life.exe: CMakeFiles/ca3-a-bugs-life.dir/Board.cpp.obj
 ca3-a-bugs-life.exe: CMakeFiles/ca3-a-bugs-life.dir/Hopper.cpp.obj
 ca3-a-bugs-life.exe: CMakeFiles/ca3-a-bugs-life.dir/Bug.cpp.obj
-ca3-a-bugs-life.exe: CMakeFiles/ca3-a-bugs-life.dir/SuperBug.cpp.obj
+ca3-a-bugs-life.exe: CMakeFiles/ca3-a-bugs-life.dir/Jumper.cpp.obj
 ca3-a-bugs-life.exe: CMakeFiles/ca3-a-bugs-life.dir/build.make
 ca3-a-bugs-life.exe: C:/SFML-2.6.2/lib/libsfml-graphics-d.a
 ca3-a-bugs-life.exe: C:/SFML-2.6.2/lib/libsfml-window-d.a

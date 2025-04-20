@@ -17,6 +17,8 @@ add_executable(ca3-a-bugs-life
         Hopper.cpp
         Hopper.h
         Bug.cpp
+        Jumper.cpp
+        Jumper.h
 )
 
 # Link SFML libraries

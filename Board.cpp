@@ -5,6 +5,7 @@
 #include <iostream>
 #include <thread>
 #include "Hopper.h"
+#include "Jumper.h"
 using namespace std;
 using namespace chrono;
 
@@ -74,6 +75,9 @@ void Board::loadBugsFromFile(const std::string& filename = "bugs.txt") {
         } else if (type == 'H') {
             addBug(new Hopper(id, pos, dir, size));
         }
+        else if (type == 'J') {
+            addBug(new Jumper(id, pos, dir, size));
+        }
     }
 
     file.close();
@@ -99,7 +103,10 @@ void Board::displayBoard() const {
             extra = " " + std::to_string(hopper->getHopLength());
         } else if (dynamic_cast<const Crawler*>(bug)) {
             typeName = "Crawler";
-        } else {
+        }else if (dynamic_cast<const Jumper*>(bug)) {
+            typeName = "Jumper";
+        }
+        else {
             typeName = "Unknown";
         }
 
@@ -150,6 +157,10 @@ void Board::displayBugHistories() const {
         } else if (dynamic_cast<const Crawler*>(bug)) {
             type = "Crawler";
         }
+        else if (dynamic_cast<const Jumper*>(bug)) {
+            type = "Jumper";
+        }
+
 
         std::cout << bug->getId() << " " << type << " Path: ";
 
@@ -181,7 +192,8 @@ void Board::writeLifeHistoryToFile() const {
 
     for (const Bug* bug : bugs) {
         std::string type = dynamic_cast<const Hopper*>(bug) ? "Hopper" :
-                           dynamic_cast<const Crawler*>(bug) ? "Crawler" : "Unknown";
+                           dynamic_cast<const Crawler*>(bug) ? "Crawler" :
+                            dynamic_cast<const Jumper*>(bug)? "Jumper": "Unknown";
 
         outfile << bug->getId() << " " << type << " path: ";
 
@@ -240,7 +252,10 @@ void Board::displayCells() const {
                     std::cout << "Crawler " << bug->getId();
                 } else if (dynamic_cast<const Hopper*>(bug)) {
                     std::cout << "Hopper " << bug->getId();
-                } else {
+                }else if (dynamic_cast<const Jumper*>(bug)) {
+                    std::cout << "Jumper " << bug->getId();
+                }
+                else {
                     std::cout << "UnknownBug " << bug->getId();
                 }
 

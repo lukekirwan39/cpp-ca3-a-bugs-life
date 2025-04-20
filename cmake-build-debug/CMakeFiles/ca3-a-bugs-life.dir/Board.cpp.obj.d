@@ -272,4 +272,5 @@ CMakeFiles/ca3-a-bugs-life.dir/Board.cpp.obj: \
  C:/Program\ Files/JetBrains/CLion\ 2024.3.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/cstdint \
  C:/Program\ Files/JetBrains/CLion\ 2024.3.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/limits \
  C:/Program\ Files/JetBrains/CLion\ 2024.3.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/parse_numbers.h \
- C:\Users\araya\OneDrive\ -\ Dundalk\ Institute\ of\ Technology\C++\cpp-ca3-a-bugs-life\Hopper.h
+ C:\Users\araya\OneDrive\ -\ Dundalk\ Institute\ of\ Technology\C++\cpp-ca3-a-bugs-life\Hopper.h \
+ C:\Users\araya\OneDrive\ -\ Dundalk\ Institute\ of\ Technology\C++\cpp-ca3-a-bugs-life\Jumper.h
