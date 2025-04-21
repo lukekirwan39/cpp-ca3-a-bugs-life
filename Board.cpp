@@ -401,3 +401,16 @@ void Board::runSimulation() {
     writeLifeHistoryToFile();
     std::cout << "Life history saved to file.\n";
 }
+
+std::vector<Bug*> Board::getBugs() const {
+    return bugs;
+}
+
+void Board::superBugFight(int x, int y) {
+    auto& cell = grid[y][x];
+    for (Bug* bug : cell) {
+        if (bug->isAlive()) {
+            bug->setAlive(false); // Super-Bug defeats them
+        }
+    }
+}

@@ -46,6 +46,7 @@ void Jumper::move() {
     recordMove(newPos);
 
 }
+
 void Jumper::display() const {
     std::cout<< "Jumper ID: "<<getId()
               <<"\nPosition: (" << getPosition().x << ", " << getPosition().y << ")"
