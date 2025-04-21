@@ -9,22 +9,26 @@ Crawler::Crawler(int id, Position startPos, Direction dir, int size)
 }
 
 void Crawler::move() {
-    if (!isAlive()) return;
+    if (!alive) return;
 
-    while (isWayBlocked(10, 10)) {
-        direction = static_cast<Direction>((std::rand() % 4) + 1);
+    Position newPos = position;
+
+    switch (direction) {
+    case Direction::NORTH: newPos.y--; break;
+    case Direction::EAST:  newPos.x++; break;
+    case Direction::SOUTH: newPos.y++; break;
+    case Direction::WEST:  newPos.x--; break;
     }
 
-    Position newPos = getPosition();
-
-    switch (getDirection()) {
-        case Direction::NORTH: newPos.y--; break;
-        case Direction::EAST:  newPos.x++; break;
-        case Direction::SOUTH: newPos.y++; break;
-        case Direction::WEST:  newPos.x--; break;
+    // Prevent off-board movement (assuming 0–9 grid)
+    if (newPos.x < 0 || newPos.x >= 10 || newPos.y < 0 || newPos.y >= 10) {
+        // Change direction randomly if blocked
+        direction = static_cast<Direction>(rand() % 4);
+        return; // skip move this cycle
     }
 
-    recordMove(newPos);
+    position = newPos;
+    path.push_back(newPos);
 }
 
 void Crawler::grow(int amount) {

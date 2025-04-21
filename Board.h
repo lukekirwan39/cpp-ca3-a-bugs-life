@@ -35,6 +35,8 @@ public:
     void tapBoard();
     int countAliveBugs() const;
     void runSimulation();
+    std::vector<Bug*> getBugs() const;
+    void superBugFight(int x, int y);
 
     // prevent copying
     Board(const Board&) = delete;

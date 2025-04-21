@@ -4,6 +4,11 @@
 #include <fstream>
 #include <iostream>
 #include <thread>
+#include "Hopper.h"
+#include "Jumper.h"
+using namespace std;
+using namespace chrono;
+
 
 #include "Hopper.h"
 
@@ -72,6 +77,9 @@ void Board::loadBugsFromFile(const std::string& filename = "bugs.txt") {
         } else if (type == 'H') {
             addBug(new Hopper(id, pos, dir, size));
         }
+        else if (type == 'J') {
+            addBug(new Jumper(id, pos, dir, size));
+        }
     }
 
     file.close();
@@ -97,7 +105,10 @@ void Board::displayBoard() const {
             extra = " " + std::to_string(hopper->getHopLength());
         } else if (dynamic_cast<const Crawler*>(bug)) {
             typeName = "Crawler";
-        } else {
+        }else if (dynamic_cast<const Jumper*>(bug)) {
+            typeName = "Jumper";
+        }
+        else {
             typeName = "Unknown";
         }
 
@@ -134,6 +145,7 @@ void Board::moveAll() {
             bug->move();
 
             Position newPos = bug->getPosition();
+            std::cout << "Bug " << bug->getId() << " moved from (" << oldPos.x << "," << oldPos.y << ") to (" << newPos.x << "," << newPos.y << ")\n";
             grid[newPos.y][newPos.x].push_back(bug);
         }
     }
@@ -147,6 +159,10 @@ void Board::displayBugHistories() const {
         } else if (dynamic_cast<const Crawler*>(bug)) {
             type = "Crawler";
         }
+        else if (dynamic_cast<const Jumper*>(bug)) {
+            type = "Jumper";
+        }
+
 
         std::cout << bug->getId() << " " << type << " Path: ";
 
@@ -178,7 +194,8 @@ void Board::writeLifeHistoryToFile() const {
 
     for (const Bug* bug : bugs) {
         std::string type = dynamic_cast<const Hopper*>(bug) ? "Hopper" :
-                           dynamic_cast<const Crawler*>(bug) ? "Crawler" : "Unknown";
+                           dynamic_cast<const Crawler*>(bug) ? "Crawler" :
+                            dynamic_cast<const Jumper*>(bug)? "Jumper": "Unknown";
 
         outfile << bug->getId() << " " << type << " path: ";
 
@@ -237,7 +254,10 @@ void Board::displayCells() const {
                     std::cout << "Crawler " << bug->getId();
                 } else if (dynamic_cast<const Hopper*>(bug)) {
                     std::cout << "Hopper " << bug->getId();
-                } else {
+                }else if (dynamic_cast<const Jumper*>(bug)) {
+                    std::cout << "Jumper " << bug->getId();
+                }
+                else {
                     std::cout << "UnknownBug " << bug->getId();
                 }
 
@@ -255,11 +275,19 @@ void Board::displayCells() const {
 
 
 void Board::fightInCell(std::list<Bug*>& cell) {
+
+    const auto startTime = steady_clock::now();
+    bool timeLimit = false;
+
+    map<int, int> killCount; // Track kills for each bug
+
+    // Remove dead bugs from the list
     cell.remove_if([](Bug* bug) {
         Crawler* crawler = dynamic_cast<Crawler*>(bug);
         return (crawler && !crawler->isAlive());
     });
 
+    // Collect all the alive crawlers
     std::vector<Crawler*> crawlers;
     for (Bug* bug : cell) {
         if (Crawler* crawler = dynamic_cast<Crawler*>(bug)) {
@@ -269,35 +297,67 @@ void Board::fightInCell(std::list<Bug*>& cell) {
         }
     }
 
-    if (crawlers.size() <= 1) return;
+    // Battle loop until only one bug remains
+    while (crawlers.size() > 1 && !timeLimit) {
+        int maxSize = 0;
 
-    int maxSize = 0;
-    for (Crawler* c : crawlers) {
-        if (c->getSize() > maxSize)
-            maxSize = c->getSize();
-    }
+        for (Crawler* c : crawlers) {
+            if (c->getSize() > maxSize)
+                maxSize = c->getSize();
+        }
 
-    std::vector<Crawler*> contenders;
-    for (Crawler* c : crawlers) {
-        if (c->getSize() == maxSize)
-            contenders.push_back(c);
-    }
 
-    Crawler* dominant = (contenders.size() == 1)
-        ? contenders[0]
-        : contenders[rand() % contenders.size()];
+        std::vector<Crawler*> contenders;
+        for (Crawler* c : crawlers) {
+            if (c->getSize() == maxSize)
+                contenders.push_back(c);
+        }
 
-    int eatenSize = 0;
-    for (Crawler* c : crawlers) {
-        if (c != dominant) {
-            eatenSize += c->getSize();
-            c->setAlive(false);
-            c->setKillerId(dominant->getId());
+        // Select a dominant bug
+        Crawler* dominant = (contenders.size() == 1)
+            ? contenders[0]
+            : contenders[rand() % contenders.size()];
+
+        // Track the kills and growth of the dominant bug
+        int eatenSize = 0;
+        for (Crawler* c : crawlers) {
+            if (c != dominant) {
+                eatenSize += c->getSize();
+                c->setAlive(false);
+                c->setKillerId(dominant->getId());
+                killCount[dominant->getId()]++; // Increment kill count
+            }
+        }
+
+        dominant->grow(eatenSize);
+
+        // Check time limit (e.g., 10 seconds)
+        auto currentTime = steady_clock::now();
+        auto elapsed = duration_cast<seconds>(currentTime - startTime);
+        if (elapsed.count() >= 1) {
+            timeLimit = true;
         }
     }
 
-    dominant->grow(eatenSize);
+
+    // Collect and sort the results based on kills and size
+    std::vector<Bug*> aliveBugs;
+    for (Bug* bug : cell) {
+        if (bug->isAlive()) {
+            aliveBugs.push_back(bug);
+        }
+    }
+
+
+    // Print the results
+    for (const auto& bug : aliveBugs) {
+        cout << "Bug ID: " << bug->getId()
+             << ", Kills: " << killCount[bug->getId()]
+             << ", Size: " << bug->getSize() << endl;
+    }
 }
+
+
 
 int Board::countAliveBugs() const{
     int alive = 0;
@@ -309,16 +369,24 @@ int Board::countAliveBugs() const{
 
 void Board::runSimulation() {
     int round = 1;
+    const auto startTime = steady_clock::now();
+    bool timeLimit = false;
 
-    while (countAliveBugs() > 1) {
+    while (countAliveBugs() > 1 && !timeLimit) {
         std::cout << "\n--- Round " << round << " ---\n";
 
         moveAll();
         tapBoard();
         displayCells();
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        std::this_thread::sleep_for(milliseconds(100));
         ++round;
+
+        auto currentTime = steady_clock::now();
+        auto elapsed = duration_cast<seconds>(currentTime - startTime);
+        if (elapsed.count() >= 1) {
+            timeLimit = true;
+        }
     }
 
     std::cout << "\nSimulation complete! ";
@@ -334,4 +402,17 @@ void Board::runSimulation() {
 
     writeLifeHistoryToFile();
     std::cout << "Life history saved to file.\n";
+}
+
+std::vector<Bug*> Board::getBugs() const {
+    return bugs;
+}
+
+void Board::superBugFight(int x, int y) {
+    auto& cell = grid[y][x];
+    for (Bug* bug : cell) {
+        if (bug->isAlive()) {
+            bug->setAlive(false); // Super-Bug defeats them
+        }
+    }
 }
