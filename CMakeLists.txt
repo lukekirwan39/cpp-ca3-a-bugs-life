@@ -3,9 +3,12 @@ project(ca3-a-bugs-life)
 
 set(CMAKE_CXX_STANDARD 17)
 
-# Set SFML path (adjust for your OS if needed)
-set(SFML_DIR "C:/SFML-2.6.2/lib/cmake/SFML")
-find_package(SFML 2 REQUIRED COMPONENTS graphics window audio system)
+# Let CMake find SFML installed by Homebrew
+# (Homebrew typically installs it under /opt/homebrew)
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH} /opt/homebrew/Cellar/sfml/2.5.1/lib/cmake/SFML")
+
+# Find SFML
+find_package(SFML 2.5 REQUIRED COMPONENTS graphics window audio system)
 
 # === Console Version ===
 add_executable(console_app
@@ -27,6 +30,9 @@ add_executable(game_app
         Bug.cpp
 )
 
+# Include SFML headers
+include_directories(/opt/homebrew/include)
+
 # Link SFML only to game_app
 target_link_libraries(game_app
         PRIVATE
@@ -35,3 +41,6 @@ target_link_libraries(game_app
         sfml-audio
         sfml-system
 )
+
+# Link directories for Homebrew's lib path
+link_directories(/opt/homebrew/lib)
