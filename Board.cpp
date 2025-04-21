@@ -10,6 +10,8 @@ using namespace std;
 using namespace chrono;
 
 
+#include "Hopper.h"
+
 
 Board::Board(): width(GRID_SIZE), height(GRID_SIZE), grid(GRID_SIZE, std::vector<std::list<Bug*>>(GRID_SIZE)){}
 
