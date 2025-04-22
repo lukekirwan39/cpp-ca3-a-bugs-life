@@ -1,9 +1,8 @@
 #ifndef BUG_H
 #define BUG_H
-#include <string>
 
+#include <string>
 #include <vector>
-#include <SFML/Graphics.hpp>
 
 enum class Direction { NORTH = 1, EAST, SOUTH, WEST };
 
@@ -20,16 +19,15 @@ protected:
     Direction direction;
     int size;
     bool alive;
+    int killerId;
     std::vector<Position> path;
 
 public:
-    // constructor
     Bug(int id, Position pos, Direction dir, int size)
-        : id(id), position(pos), direction(dir), size(size), alive(true) {
+        : id(id), position(pos), direction(dir), size(size), alive(true), killerId(-1) {
         path.push_back(pos);
     }
 
-    // destructor
     virtual ~Bug() {}
 
     virtual void move() = 0;
@@ -46,21 +44,23 @@ public:
         return false;
     }
 
-    // getters
     int getId() const { return id; }
     Position getPosition() const { return position; }
     Direction getDirection() const { return direction; }
     int getSize() const { return size; }
     bool isAlive() const { return alive; }
     const std::vector<Position>& getPath() const { return path; }
+    int getKillerId() const { return killerId; }
 
-    // setters
     void setAlive(bool status) { alive = status; }
+    void setKillerId(int id) { killerId = id; }
 
     void recordMove(Position newPos) {
         position = newPos;
         path.push_back(newPos);
     }
+
+    void grow(int amount) { size += amount; }
 
     static std::string directionToString(Direction dir);
 };
