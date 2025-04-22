@@ -154,11 +154,9 @@ void Board::displayBugHistories() const {
             type = "Hopper";
         } else if (dynamic_cast<const Crawler*>(bug)) {
             type = "Crawler";
-        }
-        else if (dynamic_cast<const Jumper*>(bug)) {
+        } else if (dynamic_cast<const Jumper*>(bug)) {
             type = "Jumper";
         }
-
 
         std::cout << bug->getId() << " " << type << " Path: ";
 
@@ -170,10 +168,10 @@ void Board::displayBugHistories() const {
             }
         }
 
-        if (!bug->isAlive()) {
-            if (const Crawler* crawler = dynamic_cast<const Crawler*>(bug)) {
-                std::cout << " Eaten by " << crawler->getKillerId();
-            }
+        if (bug->isAlive()) {
+            std::cout << " - Alive";
+        } else {
+            std::cout << " - Eaten by " << bug->getKillerId();
         }
 
         std::cout << std::endl;
