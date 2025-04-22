@@ -14,7 +14,6 @@ int main() {
     Board board(gridSize, gridSize);
     board.loadBugsFromFile("bugs.txt");
 
-    // Load textures once
     sf::Texture superBugTexture, hopperTexture, jumperTexture, crawlerTexture;
     if (!superBugTexture.loadFromFile("superbug.png") ||
         !hopperTexture.loadFromFile("hopper.png") ||
@@ -31,9 +30,6 @@ int main() {
         static_cast<float>(tileSize) / superBugTexture.getSize().y
     );
 
-    sf::Clock moveTimer;
-    sf::Time moveInterval = sf::seconds(1.5f);
-
     int superX = 0, superY = 0;
 
     while (window.isOpen()) {
@@ -49,21 +45,15 @@ int main() {
                 if (event.key.code == sf::Keyboard::Right && superX < gridSize - 1) superX++;
                 if (event.key.code == sf::Keyboard::Space) {
                     board.moveAll();
+                    board.tapBoard();
                 }
             }
         }
 
         board.superBugFight(superX, superY);
 
-        if (moveTimer.getElapsedTime() >= moveInterval) {
-            board.moveAll();
-            board.superBugFight(superX, superY);
-            moveTimer.restart();
-        }
-
         window.clear(sf::Color::White);
 
-        // Draw grid
         for (int y = 0; y < gridSize; ++y) {
             for (int x = 0; x < gridSize; ++x) {
                 sf::RectangleShape cell(sf::Vector2f(tileSize, tileSize));
@@ -75,14 +65,12 @@ int main() {
             }
         }
 
-        // Draw bugs
         for (Bug* bug : board.getBugs()) {
             if (!bug->isAlive()) continue;
 
             Position pos = bug->getPosition();
             sf::Sprite bugSprite;
 
-            // Use RTTI to determine bug type
             if (dynamic_cast<Hopper*>(bug)) {
                 bugSprite.setTexture(hopperTexture);
             } else if (dynamic_cast<Jumper*>(bug)) {
@@ -101,7 +89,6 @@ int main() {
             window.draw(bugSprite);
         }
 
-        // Draw super bug
         superBugSprite.setPosition(superX * tileSize, superY * tileSize);
         window.draw(superBugSprite);
 

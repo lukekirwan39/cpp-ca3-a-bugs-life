@@ -52,36 +52,42 @@ build cmake_object_order_depends_target_console_app: phony || .
 build CMakeFiles/console_app.dir/main.cpp.o: CXX_COMPILER__console_app_unscanned_Debug /Users/lukekirwan/Library/CloudStorage/OneDrive-DundalkInstituteofTechnology/Year2/Semester$ 2/C++/Assesment$ 2025/CA3$ -$ Bugs_Project/ca3-a-bugs-life/main.cpp || cmake_object_order_depends_target_console_app
   DEP_FILE = CMakeFiles/console_app.dir/main.cpp.o.d
   FLAGS = -g -std=gnu++17 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -fcolor-diagnostics
+  INCLUDES = -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/console_app.dir
   OBJECT_FILE_DIR = CMakeFiles/console_app.dir
 
 build CMakeFiles/console_app.dir/Board.cpp.o: CXX_COMPILER__console_app_unscanned_Debug /Users/lukekirwan/Library/CloudStorage/OneDrive-DundalkInstituteofTechnology/Year2/Semester$ 2/C++/Assesment$ 2025/CA3$ -$ Bugs_Project/ca3-a-bugs-life/Board.cpp || cmake_object_order_depends_target_console_app
   DEP_FILE = CMakeFiles/console_app.dir/Board.cpp.o.d
   FLAGS = -g -std=gnu++17 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -fcolor-diagnostics
+  INCLUDES = -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/console_app.dir
   OBJECT_FILE_DIR = CMakeFiles/console_app.dir
 
 build CMakeFiles/console_app.dir/Crawler.cpp.o: CXX_COMPILER__console_app_unscanned_Debug /Users/lukekirwan/Library/CloudStorage/OneDrive-DundalkInstituteofTechnology/Year2/Semester$ 2/C++/Assesment$ 2025/CA3$ -$ Bugs_Project/ca3-a-bugs-life/Crawler.cpp || cmake_object_order_depends_target_console_app
   DEP_FILE = CMakeFiles/console_app.dir/Crawler.cpp.o.d
   FLAGS = -g -std=gnu++17 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -fcolor-diagnostics
+  INCLUDES = -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/console_app.dir
   OBJECT_FILE_DIR = CMakeFiles/console_app.dir
 
 build CMakeFiles/console_app.dir/Hopper.cpp.o: CXX_COMPILER__console_app_unscanned_Debug /Users/lukekirwan/Library/CloudStorage/OneDrive-DundalkInstituteofTechnology/Year2/Semester$ 2/C++/Assesment$ 2025/CA3$ -$ Bugs_Project/ca3-a-bugs-life/Hopper.cpp || cmake_object_order_depends_target_console_app
   DEP_FILE = CMakeFiles/console_app.dir/Hopper.cpp.o.d
   FLAGS = -g -std=gnu++17 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -fcolor-diagnostics
+  INCLUDES = -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/console_app.dir
   OBJECT_FILE_DIR = CMakeFiles/console_app.dir
 
 build CMakeFiles/console_app.dir/Jumper.cpp.o: CXX_COMPILER__console_app_unscanned_Debug /Users/lukekirwan/Library/CloudStorage/OneDrive-DundalkInstituteofTechnology/Year2/Semester$ 2/C++/Assesment$ 2025/CA3$ -$ Bugs_Project/ca3-a-bugs-life/Jumper.cpp || cmake_object_order_depends_target_console_app
   DEP_FILE = CMakeFiles/console_app.dir/Jumper.cpp.o.d
   FLAGS = -g -std=gnu++17 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -fcolor-diagnostics
+  INCLUDES = -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/console_app.dir
   OBJECT_FILE_DIR = CMakeFiles/console_app.dir
 
 build CMakeFiles/console_app.dir/Bug.cpp.o: CXX_COMPILER__console_app_unscanned_Debug /Users/lukekirwan/Library/CloudStorage/OneDrive-DundalkInstituteofTechnology/Year2/Semester$ 2/C++/Assesment$ 2025/CA3$ -$ Bugs_Project/ca3-a-bugs-life/Bug.cpp || cmake_object_order_depends_target_console_app
   DEP_FILE = CMakeFiles/console_app.dir/Bug.cpp.o.d
   FLAGS = -g -std=gnu++17 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -fcolor-diagnostics
+  INCLUDES = -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/console_app.dir
   OBJECT_FILE_DIR = CMakeFiles/console_app.dir
 

@@ -3,45 +3,31 @@
 #include <cstdlib>
 
 void Hopper::move() {
-    int dx = 0, dy = 0;
-
-    switch (direction) {
-    case Direction::NORTH: dy = -1; break;
-    case Direction::EAST:  dx = 1;  break;
-    case Direction::SOUTH: dy = 1;  break;
-    case Direction::WEST:  dx = -1; break;
-    }
+    if (!isAlive()) return;
 
     const int boardWidth = 10;
     const int boardHeight = 10;
 
-    int newX = position.x + dx * hopLength;
-    int newY = position.y + dy * hopLength;
+    int dx = 0, dy = 0;
 
-    while (newX < 0 || newX >= boardWidth || newY < 0 || newY >= boardHeight) {
-        int dirInt = 1 + rand() % 4;
-        direction = static_cast<Direction>(dirInt);
+    direction = static_cast<Direction>(1 + rand() % 4);
 
-        switch (direction) {
-        case Direction::NORTH: dx = 0; dy = -1; break;
-        case Direction::EAST:  dx = 1; dy = 0; break;
-        case Direction::SOUTH: dx = 0; dy = 1; break;
-        case Direction::WEST:  dx = -1; dy = 0; break;
+    switch (direction) {
+    case Direction::NORTH: dx = 0; dy = -1; break;
+    case Direction::EAST:  dx = 1; dy = 0;  break;
+    case Direction::SOUTH: dx = 0; dy = 1;  break;
+    case Direction::WEST:  dx = -1; dy = 0; break;
+    }
+
+    for (int hop = hopLength; hop > 0; --hop) {
+        int newX = position.x + dx * hop;
+        int newY = position.y + dy * hop;
+
+        if (newX >= 0 && newX < boardWidth && newY >= 0 && newY < boardHeight) {
+            recordMove(Position(newX, newY));
+            return;
         }
-
-        newX = position.x + dx * hopLength;
-        newY = position.y + dy * hopLength;
     }
-
-    int actualHop = hopLength;
-    while (newX < 0 || newX >= boardWidth || newY < 0 || newY >= boardHeight) {
-        actualHop--;
-        newX = position.x + dx * actualHop;
-        newY = position.y + dy * actualHop;
-    }
-
-    Position newPos(newX, newY);
-    recordMove(newPos);
 }
 
 void Hopper::display() const {

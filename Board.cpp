@@ -9,10 +9,6 @@
 using namespace std;
 using namespace chrono;
 
-
-#include "Hopper.h"
-
-
 Board::Board(): width(GRID_SIZE), height(GRID_SIZE), grid(GRID_SIZE, std::vector<std::list<Bug*>>(GRID_SIZE)){}
 
 Board::Board(int w, int h) : width(w), height(h), grid(h, std::vector<std::list<Bug*>>(w)){}
@@ -193,9 +189,12 @@ void Board::writeLifeHistoryToFile() const {
     }
 
     for (const Bug* bug : bugs) {
-        std::string type = dynamic_cast<const Hopper*>(bug) ? "Hopper" :
-                           dynamic_cast<const Crawler*>(bug) ? "Crawler" :
-                            dynamic_cast<const Jumper*>(bug)? "Jumper": "Unknown";
+        std::string type;
+
+        if (dynamic_cast<const Hopper*>(bug))      type = "Hopper";
+        else if (dynamic_cast<const Crawler*>(bug)) type = "Crawler";
+        else if (dynamic_cast<const Jumper*>(bug))  type = "Jumper";
+        else                                        type = "Unknown";
 
         outfile << bug->getId() << " " << type << " path: ";
 
@@ -209,11 +208,7 @@ void Board::writeLifeHistoryToFile() const {
 
         outfile << " - ";
         if (!bug->isAlive()) {
-            if (const Crawler* c = dynamic_cast<const Crawler*>(bug)) {
-                outfile << "Eaten by " << c->getKillerId();
-            } else {
-                outfile << "Dead";
-            }
+            outfile << "Eaten by " << bug->getKillerId();
         } else {
             outfile << "Still alive";
         }
@@ -222,7 +217,6 @@ void Board::writeLifeHistoryToFile() const {
     }
 
     outfile.close();
-
     std::cout << "Life history of all bugs written to: bugs_life_history.out\n";
 }
 
@@ -275,89 +269,51 @@ void Board::displayCells() const {
 
 
 void Board::fightInCell(std::list<Bug*>& cell) {
-
-    const auto startTime = steady_clock::now();
-    bool timeLimit = false;
-
-    map<int, int> killCount; // Track kills for each bug
-
-    // Remove dead bugs from the list
     cell.remove_if([](Bug* bug) {
-        Crawler* crawler = dynamic_cast<Crawler*>(bug);
-        return (crawler && !crawler->isAlive());
+        return !bug->isAlive();
     });
 
-    // Collect all the alive crawlers
-    std::vector<Crawler*> crawlers;
-    for (Bug* bug : cell) {
-        if (Crawler* crawler = dynamic_cast<Crawler*>(bug)) {
-            if (crawler->isAlive()) {
-                crawlers.push_back(crawler);
-            }
-        }
-    }
-
-    // Battle loop until only one bug remains
-    while (crawlers.size() > 1 && !timeLimit) {
-        int maxSize = 0;
-
-        for (Crawler* c : crawlers) {
-            if (c->getSize() > maxSize)
-                maxSize = c->getSize();
-        }
-
-
-        std::vector<Crawler*> contenders;
-        for (Crawler* c : crawlers) {
-            if (c->getSize() == maxSize)
-                contenders.push_back(c);
-        }
-
-        // Select a dominant bug
-        Crawler* dominant = (contenders.size() == 1)
-            ? contenders[0]
-            : contenders[rand() % contenders.size()];
-
-        // Track the kills and growth of the dominant bug
-        int eatenSize = 0;
-        for (Crawler* c : crawlers) {
-            if (c != dominant) {
-                eatenSize += c->getSize();
-                c->setAlive(false);
-                c->setKillerId(dominant->getId());
-                killCount[dominant->getId()]++; // Increment kill count
-            }
-        }
-
-        dominant->grow(eatenSize);
-
-        // Check time limit (e.g., 10 seconds)
-        auto currentTime = steady_clock::now();
-        auto elapsed = duration_cast<seconds>(currentTime - startTime);
-        if (elapsed.count() >= 1) {
-            timeLimit = true;
-        }
-    }
-
-
-    // Collect and sort the results based on kills and size
-    std::vector<Bug*> aliveBugs;
+    std::vector<Bug*> bugs;
     for (Bug* bug : cell) {
         if (bug->isAlive()) {
-            aliveBugs.push_back(bug);
+            bugs.push_back(bug);
         }
     }
 
+    if (bugs.size() <= 1) return;
 
-    // Print the results
-    for (const auto& bug : aliveBugs) {
-        cout << "Bug ID: " << bug->getId()
-             << ", Kills: " << killCount[bug->getId()]
-             << ", Size: " << bug->getSize() << endl;
+    int maxSize = 0;
+    for (Bug* b : bugs) {
+        if (b->getSize() > maxSize)
+            maxSize = b->getSize();
     }
+
+    std::vector<Bug*> contenders;
+    for (Bug* b : bugs) {
+        if (b->getSize() == maxSize)
+            contenders.push_back(b);
+    }
+
+    Bug* dominant = (contenders.size() == 1)
+        ? contenders[0]
+        : contenders[rand() % contenders.size()];
+
+    int eatenSize = 0;
+    for (Bug* b : bugs) {
+        if (b != dominant) {
+            b->setAlive(false);
+            b->setKillerId(dominant->getId());
+            eatenSize += b->getSize();
+        }
+    }
+
+    dominant->grow(eatenSize);
+
+
+    std::cout << "Bug ID " << dominant->getId()
+              << " wins the fight and grows by " << eatenSize
+              << " to size " << dominant->getSize() << "." << std::endl;
 }
-
-
 
 int Board::countAliveBugs() const{
     int alive = 0;
@@ -369,35 +325,32 @@ int Board::countAliveBugs() const{
 
 void Board::runSimulation() {
     int round = 1;
-    const auto startTime = steady_clock::now();
-    bool timeLimit = false;
 
-    while (countAliveBugs() > 1 && !timeLimit) {
+    while (countAliveBugs() > 1) {
         std::cout << "\n--- Round " << round << " ---\n";
 
         moveAll();
         tapBoard();
-        displayCells();
 
         std::this_thread::sleep_for(milliseconds(100));
         ++round;
-
-        auto currentTime = steady_clock::now();
-        auto elapsed = duration_cast<seconds>(currentTime - startTime);
-        if (elapsed.count() >= 1) {
-            timeLimit = true;
-        }
     }
 
     std::cout << "\nSimulation complete! ";
     if (countAliveBugs() == 1) {
         for (Bug* bug : bugs) {
             if (bug->isAlive()) {
-                std::cout << "Last bug standing: Crawler " << bug->getId() << "\n";
+                std::string type;
+                if (dynamic_cast<Hopper*>(bug)) type = "Hopper";
+                else if (dynamic_cast<Crawler*>(bug)) type = "Crawler";
+                else if (dynamic_cast<Jumper*>(bug)) type = "Jumper";
+                else type = "Unknown";
+
+                std::cout << "Last bug standing: " << type << " " << bug->getId() << "\n";
             }
         }
     } else {
-        std::cout << "No bugs survived. \n";
+        std::cout << "No bugs survived.\n";
     }
 
     writeLifeHistoryToFile();
@@ -408,11 +361,11 @@ std::vector<Bug*> Board::getBugs() const {
     return bugs;
 }
 
-void Board::superBugFight(int x, int y) {
+void Board::superBugFight(int x, int y) const{
     auto& cell = grid[y][x];
     for (Bug* bug : cell) {
         if (bug->isAlive()) {
-            bug->setAlive(false); // Super-Bug defeats them
+            bug->setAlive(false);
         }
     }
 }

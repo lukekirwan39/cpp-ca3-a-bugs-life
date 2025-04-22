@@ -36,7 +36,7 @@ public:
     int countAliveBugs() const;
     void runSimulation();
     std::vector<Bug*> getBugs() const;
-    void superBugFight(int x, int y);
+    void superBugFight(int x, int y) const;
 
     // prevent copying
     Board(const Board&) = delete;
