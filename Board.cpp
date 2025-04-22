@@ -325,8 +325,19 @@ int Board::countAliveBugs() const{
 
 void Board::runSimulation() {
     int round = 1;
+    const int maxTime=10;
+    const auto startTime=std::chrono::steady_clock::now();
+    bool timeLimit = false;
 
     while (countAliveBugs() > 1) {
+
+        auto currentTime = std::chrono::steady_clock::now();
+        auto elapsedTime= std::chrono::duration_cast<std::chrono::seconds>(currentTime-startTime).count();
+        if (elapsedTime>=maxTime) {
+            std::cout << "\nMaximum simulation time reached. Both bugs win!\n";
+            timeLimit = true;
+            break;
+        }
         std::cout << "\n--- Round " << round << " ---\n";
 
         moveAll();
@@ -335,9 +346,10 @@ void Board::runSimulation() {
         std::this_thread::sleep_for(milliseconds(100));
         ++round;
     }
-
-    std::cout << "\nSimulation complete! ";
-    if (countAliveBugs() == 1) {
+    if (timeLimit) {
+        std::cout << "\nSimulation complete! ";
+    }
+    else if (countAliveBugs() == 1) {
         for (Bug* bug : bugs) {
             if (bug->isAlive()) {
                 std::string type;
