@@ -36,10 +36,10 @@ public:
 
     bool isWayBlocked(int boardWidth, int boardHeight) {
         switch (direction) {
-        case Direction::NORTH: return position.y == 0;
-        case Direction::EAST:  return position.x == boardWidth - 1;
-        case Direction::SOUTH: return position.y == boardHeight - 1;
-        case Direction::WEST:  return position.x == 0;
+            case Direction::NORTH: return position.y == 0;
+            case Direction::EAST:  return position.x == boardWidth - 1;
+            case Direction::SOUTH: return position.y == boardHeight - 1;
+            case Direction::WEST:  return position.x == 0;
         }
         return false;
     }
